@@ -1,19 +1,65 @@
 package logger
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"time"
+)
 
-func Info(message string, params interface{}) {
-	fmt.Println("Log info message: ", message, " params: ", params)
+var now = time.Now().Format("_2 Jan 15:04:05.000")
+
+func outputMessage(level string, message string) {
+	fmt.Printf("%v\t%s: %s\n", now, level, message)
 }
 
-func Error(message string, params interface{}) {
-	fmt.Println("Log error message: ", message, " params: ", params)
+func writeInFile(path string, level, message string) {
+	file, err := os.OpenFile(path, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
+	if err != nil {
+		fmt.Println("file create/open error")
+		os.Exit(1)
+	}
+
+	defer file.Close()
+	fullMessage := fmt.Sprintf("%v\t%s: %s\n", now, level, message)
+	file.Write([]byte(fullMessage))
 }
 
-func Warning(message string, params interface{}) {
-	fmt.Println("Log warning message: ", message, " params: ", params)
+func Info(message string) {
+	outputMessage("Info", message)
 }
 
-func Fatal(message string, params interface{}) {
-	fmt.Println("Log fatal message: ", message, " params: ", params)
+func FInfo(message string, path string) {
+	writeInFile(path, "Info", message)
+}
+
+func Error(message string) {
+	outputMessage("Error", message)
+}
+
+func FError(message string, path string) {
+	writeInFile(path, "Error", message)
+}
+
+func Warning(message string) {
+	outputMessage("Warning", message)
+}
+
+func FWarning(message string, path string) {
+	writeInFile(path, "Warning", message)
+}
+
+func Debug(message string) {
+	outputMessage("Debug", message)
+}
+
+func FDebug(message string, path string) {
+	writeInFile(path, "Debug", message)
+}
+
+func Fatal(message string) {
+	outputMessage("Fatal", message)
+}
+
+func FFatal(message string, path string) {
+	writeInFile(path, "Fatal", message)
 }
