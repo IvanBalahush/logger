@@ -46,42 +46,65 @@ func writeInFile(path string, level, message string) {
 	file.Write([]byte(fullMessage))
 }
 
+// Info - generally useful information to log
+// (service start/stop, configuration assumptions, etc).
+// Info I want to always have available but usually
+// don't care about under normal circumstances.
 func Info(message string) {
 	outputMessage(levelInfo, message)
 }
 
+// FInfo appends message to the end of file in path string with level "Info".
 func FInfo(message string, path string) {
 	writeInFile(path, "Info", message)
 }
 
+// Error - any error which is fatal to the operation,
+// but not the service or application (can't open a
+// required file, missing data, etc.).
+// These errors will force user (administrator, or direct user)
+// intervention. These are usually reserved (in my apps)
+// for incorrect connection strings, missing services, etc.
 func Error(message string) {
 	outputMessage(levelError, message)
 }
 
+// FError appends message to the end of file in path string with level "Error".
 func FError(message string, path string) {
 	writeInFile(path, "Error", message)
 }
 
+//Warning - Anything that can potentially cause application
+// oddities, but for which I am automatically recovering.
+// (Such as switching from a primary to backup server,
+// retrying an operation, missing secondary data, etc.).
 func Warning(message string) {
 	outputMessage(levelWarning, message)
 }
-
+// FWarning appends message to the end of file in path string with level "Warning".
 func FWarning(message string, path string) {
 	writeInFile(path, "Warning", message)
 }
 
+// Debug - Information that is diagnostically helpful
+// to people more than just developers (IT, sysadmins, etc.).
 func Debug(message string) {
 	outputMessage(levelDebug, message)
 }
-
+// FDebug appends message to the end of file in path string with level "Debug".
 func FDebug(message string, path string) {
 	writeInFile(path, "Debug", message)
 }
-
+// Fatal - Any error that is forcing a shutdown of
+// the service or application to prevent data loss
+// (or further data loss). I reserve these only for
+// the most heinous errors and situations where
+// there is guaranteed to have been data corruption or loss.
 func Fatal(message string) {
 	outputMessage(levelFatal, message)
 }
 
+// FFatal appends message to the end of file in path string with level "Fatal".
 func FFatal(message string, path string) {
 	writeInFile(path, "Fatal", message)
 }
