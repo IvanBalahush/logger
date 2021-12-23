@@ -6,7 +6,28 @@ import (
 	"time"
 )
 
-var now = time.Now().Format("_2 Jan 15:04:05.000")
+var (
+	now = time.Now().Format("_2 Jan 15:04:05.000")
+
+	// Colors
+	reset  = "\033[0m"
+	red    = "\033[31m"
+	green  = "\033[32m"
+	yellow = "\033[33m"
+	blue   = "\033[34m"
+	purple = "\033[35m"
+	cyan   = "\033[36m"
+	gray   = "\033[37m"
+	white  = "\033[97m"
+
+	// Levels
+	levelInfo = cyan + "Info" + reset
+	levelError = red + "Error" + reset
+	levelWarning = yellow + "Warning" + reset
+	levelDebug = purple + "Debug" + reset
+	levelFatal = gray + "Fatal" + reset
+
+)
 
 func outputMessage(level string, message string) {
 	fmt.Printf("%v\t%s: %s\n", now, level, message)
@@ -20,12 +41,13 @@ func writeInFile(path string, level, message string) {
 	}
 
 	defer file.Close()
+
 	fullMessage := fmt.Sprintf("%v\t%s: %s\n", now, level, message)
 	file.Write([]byte(fullMessage))
 }
 
 func Info(message string) {
-	outputMessage("Info", message)
+	outputMessage(levelInfo, message)
 }
 
 func FInfo(message string, path string) {
@@ -33,7 +55,7 @@ func FInfo(message string, path string) {
 }
 
 func Error(message string) {
-	outputMessage("Error", message)
+	outputMessage(levelError, message)
 }
 
 func FError(message string, path string) {
@@ -41,7 +63,7 @@ func FError(message string, path string) {
 }
 
 func Warning(message string) {
-	outputMessage("Warning", message)
+	outputMessage(levelWarning, message)
 }
 
 func FWarning(message string, path string) {
@@ -49,7 +71,7 @@ func FWarning(message string, path string) {
 }
 
 func Debug(message string) {
-	outputMessage("Debug", message)
+	outputMessage(levelDebug, message)
 }
 
 func FDebug(message string, path string) {
@@ -57,7 +79,7 @@ func FDebug(message string, path string) {
 }
 
 func Fatal(message string) {
-	outputMessage("Fatal", message)
+	outputMessage(levelFatal, message)
 }
 
 func FFatal(message string, path string) {
