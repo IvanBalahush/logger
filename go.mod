@@ -1,3 +1,3 @@
-module github.com/IvanBalahush/logger/v3
+module github.com/IvanBalahush/logger
 
 go 1.13
