@@ -28,10 +28,14 @@ const (
 	levelFatal   = gray + "Fatal" + reset
 )
 
-// Logger - to use logger  you should initialise it and fill the FilePath,
-// if you don't want to write in file your logs, just leave the field blank "".
-type Logger struct {
+type logger struct {
 	FilePath string
+}
+
+// NewLogger - to use logger  you should initialise it and fill the path,
+// if you don't want to write in file your logs, just leave the field blank "".
+func NewLogger(path string) logger {
+	return logger{FilePath: path}
 }
 
 func outputMessage(level string, message string) {
@@ -55,12 +59,12 @@ func writeInFile(path string, level, message string) {
 // (service start/stop, configuration assumptions, etc).
 // Info I want to always have available but usually
 // don't care about under normal circumstances.
-func (l *Logger) Info(message string) {
+func (l *logger) Info(message string) {
 	outputMessage(levelInfo, message)
 }
 
 // FInfo appends message to the end of file in path string with level "Info".
-func (l *Logger) FInfo(message string) {
+func (l *logger) FInfo(message string) {
 	writeInFile(l.FilePath, "Info", message)
 }
 
@@ -70,12 +74,12 @@ func (l *Logger) FInfo(message string) {
 // These errors will force user (administrator, or direct user)
 // intervention. These are usually reserved (in my apps)
 // for incorrect connection strings, missing services, etc.
-func (l *Logger) Error(message string) {
+func (l *logger) Error(message string) {
 	outputMessage(levelError, message)
 }
 
 // FError appends message to the end of file in path string with level "Error".
-func (l *Logger) FError(message string) {
+func (l *logger) FError(message string) {
 	writeInFile(l.FilePath, "Error", message)
 }
 
@@ -83,23 +87,23 @@ func (l *Logger) FError(message string) {
 // oddities, but for which I am automatically recovering.
 // (Such as switching from a primary to backup server,
 // retrying an operation, missing secondary data, etc.).
-func (l *Logger) Warning(message string) {
+func (l *logger) Warning(message string) {
 	outputMessage(levelWarning, message)
 }
 
 // FWarning appends message to the end of file in path string with level "Warning".
-func (l *Logger) FWarning(message string) {
+func (l *logger) FWarning(message string) {
 	writeInFile(l.FilePath, "Warning", message)
 }
 
 // Debug - Information that is diagnostically helpful
 // to people more than just developers (IT, sysadmins, etc.).
-func (l *Logger) Debug(message string) {
+func (l *logger) Debug(message string) {
 	outputMessage(levelDebug, message)
 }
 
 // FDebug appends message to the end of file in path string with level "Debug".
-func (l *Logger) FDebug(message string) {
+func (l *logger) FDebug(message string) {
 	writeInFile(l.FilePath, "Debug", message)
 }
 
@@ -108,11 +112,11 @@ func (l *Logger) FDebug(message string) {
 // (or further data loss). I reserve these only for
 // the most heinous errors and situations where
 // there is guaranteed to have been data corruption or loss.
-func (l *Logger) Fatal(message string) {
+func (l *logger) Fatal(message string) {
 	outputMessage(levelFatal, message)
 }
 
 // FFatal appends message to the end of file in path string with level "Fatal".
-func (l *Logger) FFatal(message string) {
+func (l *logger) FFatal(message string) {
 	writeInFile(l.FilePath, "Fatal", message)
 }
